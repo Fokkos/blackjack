@@ -1,9 +1,9 @@
 import pygame
-from ..utils.constraints import WHITE
 from ..components.deck import Deck
 from ..components.button import Button
-from ..utils.constraints import MENU_INPUT_X, MENU_INPUT_WIDTH, MENU_INPUT_HEIGHT, WINDOW_WIDTH
+from ..utils.constraints import *
 from ..components.player_deck import PlayerDeck
+
 
 def game_screen(window_surface, settings):
     # Create a shuffled deck
@@ -23,8 +23,9 @@ def game_screen(window_surface, settings):
 
     hit_button = Button(MENU_INPUT_X, 10, 200, MENU_INPUT_HEIGHT, pygame.Color('#008CBA'), "Hit")
     stand_button = Button(MENU_INPUT_X + 220, 10, 200, MENU_INPUT_HEIGHT, pygame.Color('#AA0033'), "Stand")
+    next_round_button = Button(MENU_INPUT_X, NEXT_ROUND_BTN_Y, MENU_INPUT_WIDTH, MENU_INPUT_HEIGHT, pygame.Color('#00FF33'), "Next Round")
 
-    # TODO deal with player drawing 21 initially
+    game_round = 1
     turn = 0
 
     is_running = True
@@ -47,6 +48,7 @@ def game_screen(window_surface, settings):
                             turn += 1
                 if stand_button.is_clicked(event.pos) and turn < settings.num_players:
                     turn += 1
+                # if end of round, enable next round
 
         # Draw the game screen
         window_surface.fill((32, 128, 32))  # Green background
@@ -54,7 +56,7 @@ def game_screen(window_surface, settings):
         # Display game settings
         font = pygame.font.SysFont(None, 36)
         settings_text = (
-            f"Players: {settings.num_players}, Rounds: {settings.num_rounds}, Ace Value: {settings.ace_value}"
+            f"Round {game_round}/{settings.num_rounds}"
         )
         text_surface = font.render(settings_text, True, WHITE)
         window_surface.blit(text_surface, (20, 20))
@@ -68,6 +70,10 @@ def game_screen(window_surface, settings):
         hit_button.draw(window_surface)
         if turn < settings.num_players:
             stand_button.draw(window_surface)
+
+            # If player draws a natural blackjack, move to the next player
+            if players[turn].total == 21:
+                turn += 1
 
         # Draw dealer
         font = pygame.font.SysFont(None, 36)
@@ -102,7 +108,7 @@ def game_screen(window_surface, settings):
 
             # Draw player deck
             for j, card in enumerate(player.cards):
-                card.draw(window_surface, 150 + j * 120, 260 + i * 150)
+                card.draw(window_surface, 150 + j * 60, 260 + i * 150)
 
         # Check if all players/dealer have played and handle the game ending
         if turn > settings.num_players:
@@ -111,18 +117,9 @@ def game_screen(window_surface, settings):
                 winners = find_winners(dealer, players)
                 turn += 1
 
-            # Display the winners in a white box
-            pygame.draw.rect(window_surface, WHITE, (WINDOW_WIDTH/2-250, 0, 500, 100))
-            font = pygame.font.SysFont(None, 36)
-            text_surface = font.render("Winners:", True, (0, 0, 0))
-            window_surface.blit(text_surface, (WINDOW_WIDTH/2-245, 5))
-            for i, winner in enumerate(winners):
-                if winner.id == -1:
-                    # Dealer's id is -1
-                    text_surface = font.render("Dealer", True, (0, 0, 0))
-                else:
-                    text_surface = font.render(f"Player {winner.id + 1}", True, (0, 0, 0))
-                window_surface.blit(text_surface, (WINDOW_WIDTH/2-245, 25 + i * 20))
+            # Draw the end screen
+            draw_end_screen(window_surface, winners)
+            next_round_button.draw(window_surface)
 
         pygame.display.update()
 
@@ -159,3 +156,18 @@ def find_winners(dealer: PlayerDeck, players: [PlayerDeck]) -> [PlayerDeck]:
         winners.append(dealer)
 
     return winners
+
+
+def draw_end_screen(surface, winners: [PlayerDeck]):
+    pygame.draw.rect(surface, LIGHT_GRAY, (END_SCREEN_X, END_SCREEN_Y, END_SCREEN_WIDTH, END_SCREEN_HEIGHT))
+    pygame.draw.rect(surface, BLACK, (END_SCREEN_X, END_SCREEN_Y, END_SCREEN_WIDTH, END_SCREEN_HEIGHT), 6)
+    font = pygame.font.SysFont(None, 36)
+    text_surface = font.render("Winners:", True, BLACK)
+    surface.blit(text_surface, (END_SCREEN_X + 5, END_SCREEN_Y + 5))
+    for i, winner in enumerate(winners):
+        if winner.id == -1:
+            # Dealer's id is -1
+            text_surface = font.render("Dealer", True, BLACK)
+        else:
+            text_surface = font.render(f"Player {winner.id + 1}", True, BLACK)
+        surface.blit(text_surface, (END_SCREEN_X + 5, END_SCREEN_Y + 25 + i * 20))
