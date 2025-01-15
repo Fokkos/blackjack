@@ -38,12 +38,12 @@ def game_screen(window_surface, settings):
                     if turn < settings.num_players:
                         # Draw for players
                         players[turn].add_card(deck)
-                        if players[turn].bust or players[turn].total == 21:
+                        if players[turn].is_bust or players[turn].total == 21:
                             turn += 1
                     else:
                         # Draw for dealer
                         dealer.add_card(deck)
-                        if dealer.bust or dealer.total >= 17:
+                        if dealer.is_bust or dealer.total >= 17:
                             turn += 1
                 if stand_button.is_clicked(event.pos) and turn < settings.num_players:
                     turn += 1
@@ -97,7 +97,7 @@ def game_screen(window_surface, settings):
 
             # Draw player status
             font = pygame.font.SysFont(None, 36)
-            text_surface = font.render(f"Bust: {player.bust}", True, WHITE)
+            text_surface = font.render(f"Bust: {player.is_bust}", True, WHITE)
             window_surface.blit(text_surface, (5, 315 + i * 150))
 
             # Draw player deck
@@ -106,11 +106,56 @@ def game_screen(window_surface, settings):
 
         # Check if all players/dealer have played and handle the game ending
         if turn > settings.num_players:
-            # TODO Add endgame logic
-            # TODO for now when the game ends, it just displays GAME OVER
-            font = pygame.font.SysFont(None, 72)
-            text_surface = font.render("Game Over", True, ('#FF0000'))
-            window_surface.blit(text_surface, (WINDOW_WIDTH // 2 - 150, 20))
+            # Round is finished, find the winners and increment the turn so its only called once
+            if turn == settings.num_players + 1:
+                winners = find_winners(dealer, players)
+                turn += 1
 
+            # Display the winners in a white box
+            pygame.draw.rect(window_surface, WHITE, (WINDOW_WIDTH/2-250, 0, 500, 100))
+            font = pygame.font.SysFont(None, 36)
+            text_surface = font.render("Winners:", True, (0, 0, 0))
+            window_surface.blit(text_surface, (WINDOW_WIDTH/2-245, 5))
+            for i, winner in enumerate(winners):
+                if winner.id == -1:
+                    # Dealer's id is -1
+                    text_surface = font.render("Dealer", True, (0, 0, 0))
+                else:
+                    text_surface = font.render(f"Player {winner.id + 1}", True, (0, 0, 0))
+                window_surface.blit(text_surface, (WINDOW_WIDTH/2-245, 25 + i * 20))
 
         pygame.display.update()
+
+
+def find_winners(dealer: PlayerDeck, players: [PlayerDeck]) -> [PlayerDeck]:
+    print("finding winners...")
+    winners = []
+    # If dealer is bust, all non-bust players win
+    if dealer.is_bust:
+        for player in players:
+            if not player.is_bust:
+                winners.append(player)
+                print(f"Player {player.id + 1} wins as dealer is bust.")
+    else:
+        # Dealer is not bust
+        for player in players:
+            # Check if player is not bust and has a higher score than the dealer
+            if not player.is_bust and player.total > dealer.total:
+                winners.append(player)
+                print(f"Player {player.id + 1} wins with a score of {player.total}.")
+            # if both players have 21, player with natural blackjack wins, else no winner
+            elif player.total == dealer.total == 21:
+                if player.natural_blackjack() and not dealer.natural_blackjack():
+                    print(f"Player {player.id + 1} wins with a natural blackjack.")
+                    winners.append(player)
+                # If both get a natural blackjack, it's a tie, so no winner
+                elif player.natural_blackjack() and dealer.natural_blackjack():
+                    pass
+                # Don't declare the dealer as the winner yet, as there might be other players with a natural blackjack
+
+    # If none of the above scenarios have happened, the dealer wins
+    if not winners:
+        print("No winners, so dealer wins.")
+        winners.append(dealer)
+
+    return winners

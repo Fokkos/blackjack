@@ -8,11 +8,15 @@ class Card:
     def __repr__(self):
         return f"{self.rank} of {self.suit}"
 
-    def value(self):
+    def value(self, total):
         if self.rank in ['Jack', 'Queen', 'King']:
             return 10
+        # Value of ace is 11 or 1 depending on if it would bust the player
         elif self.rank == 'Ace':
-            return 11   # TODO deal with Ace value of 1 or 11
+            if total + 11 > 21:
+                return 1
+            else:
+                return 11
         else:
             return int(self.rank)
 
