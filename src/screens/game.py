@@ -49,6 +49,17 @@ def game_screen(window_surface, settings):
                 if stand_button.is_clicked(event.pos) and turn < settings.num_players:
                     turn += 1
                 # if end of round, enable next round
+                if next_round_button.is_clicked(event.pos) and turn > settings.num_players + 1:
+                    # Clear all player and dealer cards
+                    for player in players:
+                        player.clear()
+                    dealer.clear()
+                    deck.reset()
+                    dealer.add_card(deck)
+                    for player in players:
+                        player.add_first_cards(deck)
+                    game_round += 1
+                    turn = 0
 
         # Draw the game screen
         window_surface.fill((32, 128, 32))  # Green background

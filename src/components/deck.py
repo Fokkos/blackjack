@@ -4,10 +4,10 @@ from .card import Card
 
 class Deck:
     def __init__(self):
-        suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
-        ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
+        self.suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+        self.ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
         # Create a deck of 52 cards
-        self.cards = [Card(rank, suit) for suit in suits for rank in ranks]
+        self.cards = [Card(rank, suit) for suit in self.suits for rank in self.ranks]
         self.shuffle()
 
     # Shuffle the deck to ensure randomness on each session
@@ -18,6 +18,10 @@ class Deck:
     # TODO deal with empty deck
     def deal_card(self) -> Card:
         return self.cards.pop()
+
+    def reset(self):
+        self.cards = [Card(rank, suit) for suit in self.suits for rank in self.ranks]
+        self.shuffle()
 
     # Debug string to print out all the cards in the deck
     def __repr__(self) -> str:
