@@ -224,7 +224,7 @@ def draw_round_end_screen(surface, winners: [PlayerDeck]):
             text_surface = font.render("Dealer", True, BLACK)
         else:
             text_surface = font.render(f"Player {winner.id + 1}", True, BLACK)
-        surface.blit(text_surface, (END_SCREEN_X + 10, END_SCREEN_Y + 30 + i * 20))
+        surface.blit(text_surface, (END_SCREEN_X + 10, END_SCREEN_Y + 35 + i * 25))
 
 
 def draw_game_end_screen(surface, players: [PlayerDeck]):
@@ -237,7 +237,7 @@ def draw_game_end_screen(surface, players: [PlayerDeck]):
 
     for i, player in enumerate(players):
         text_surface = font.render(f"Player {player.id + 1}: {format_money(player.money)}", True, BLACK)
-        surface.blit(text_surface, (END_SCREEN_X + 10, END_SCREEN_Y + 30 + i * 20))
+        surface.blit(text_surface, (END_SCREEN_X + 10, END_SCREEN_Y + 35 + i * 25))
 
 
 # Don't define a type as money could be a string, int or float

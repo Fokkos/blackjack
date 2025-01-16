@@ -1,59 +1,46 @@
-## Blackjack Tech Test - Starter Code
 
-This code is offered as a potential starting point for completing the BBC Software Engineering Graduate Scheme tech test.
-You do **not** have to use this starter code.
+## Blackjack Tech Test
+This repository is a recreation of blackjack cerated in Python made as my pre-assessment day task for the BBC Software Engineering Graduate Scheme 2025. The logic for the game was made in Python and the UI was created using [Pygame 2.6.1](https://www.pygame.org/news).
 
+## Requirements
+- Python version 3.11 available [here](https://www.python.org/downloads/release/python-3119/)
 
-### Getting started
+## Installation
+1. Download the repository (SSH or HTTPS):
+```bash
+git clone git@github.com:Fokkos/blackjack.git
+```
+2. Navigate into the project directory:
+```bash
+cd blackjack
+```
+3. Install dependencies:
+```bash
+pip install -r .\requirements.txt
+```
 
-- Ensure you can run the provided code. 
-    - If you have Python 3 installed:
-        - Open a terminal window and navigate to the folder containing this `README.md`.
-        - Type `python3 blackjack.py`
-        - Look for a welcome message in the console.
-    - If that doesn't work, check your setup and download Python 3 if needed:
-        - https://wiki.python.org/moin/BeginnersGuide/Download
-- Ensure you can run the unit tests.
-    - From the same terminal window, type `python3 -m unittest discover test`.
-    - Python should find and run the one provided failing test, with the message `AssertionError: 0 != 52`
-    
+## Running the project
+From the `blackjack` directory, the game can be played by running
+```bash
+python blackjack.py
+```
+Which will open a Pygame window with the game fully playable. From here you select the number of players, how many rounds to play and the stake for each round.
 
-### Adding to the starter code
+## Testing
+This project was tested using the Python [unittest framework](https://docs.python.org/3/library/unittest.html), which tests the logic of the hands being dealt and scoring (as defined in the requirements document.
+The tests can be run in the CLI from the root directory with
+```bash
+python -m unittest discover -s test -p "*.py"
+```
+Which will run all tests found in the `test` directory.
+All specified features were tested for this project here besides the stand functionality, as that is done in the UI and has been thoroughly manually tested.
 
-- A great place to start is by making the provided unit test pass.
-    - The provided Deck class has an empty array, `self.cards`.
-    - The test will pass if `self.cards` on line 3 of `deck.py` contains 52 things.
-    - once this test passes, extend the test or add more tests.
-    - e.g. the first test only ensures a Deck has 52 of _something_- what else might you want to test?
-- A TDD (test-driven development) approach can be useful:
-    - write a failing test that describes what you want your code to do
-        - e.g. 'a deck should have 4 aces'
-    - modify the code that you're testing so that the test passes
-        - e.g. the deck actually *has* 4 aces!
-    - each of the scenarios in the brief can be turned into a single test
-- You can add more test files:
-    - keep them in the `test/` directory
-    - make sure they have filenames beginning with `test`
-    - make sure test methods within those files also begin with `test`
-- You can add more source files:
-    - keep them in the `src/` directory
-- You can use any approach you want
-    - The provided code hints at an object-oriented approach (since we have a Deck class)
-    - if you wanted to extend this approach, you might want to create classes for Hand, Card, Dealer, etc.
+## Copyright
+The images for the suits were created by tuyeproject and sourced from [vecteezy](https://www.vecteezy.com/vector-art/8573294-ace-card-suit-deck-ace-card-icon) using their Free License
 
-
-### Disregarding the starter code
-
-- As stated above you, can use any language or framework you prefer to solve this challenge.
-- If you prefer not to use the starter code, let us know in your submission how to run it.
-  
-  
-### Completing the task
-
-- Remember, the task is to write code that accurately scores a hand of blackjack, *not* to make a whole game
-- This means you *don't* need to have a running program to complete this test
-    - You can just prove your code works with unit tests
-    - You *don't* need to add anything to `blackjack.py` to do this.
-- You can *choose* to make a running program that demonstrates that your code works
-    - If you want to do this, you can extend the `play` method of `blackjack.py`
-    - This method is the entry point when you do `python3 blackjack.py`.
+## Screenshots
+Below are screenshots of the game in action
+<img src="img/readme/title.png" width="100%">
+<img src="img/readme/game_1.png" width="100%">
+<img src="img/readme/game_2.png" width="100%">
+<img src="img/readme/game_3.png" width="100%">
