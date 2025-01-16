@@ -22,6 +22,9 @@ class Deck:
         self.cards = [Card(rank, suit) for suit in self.suits for rank in self.ranks]
         self.shuffle()
 
+    def custom_deck(self, cards):
+        self.cards = cards
+
     # Debug string to print out all the cards in the deck
     def __repr__(self) -> str:
         return ', '.join(str(card) for card in self.cards)
