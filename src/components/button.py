@@ -13,9 +13,18 @@ class Button:
         self.text_rect = self.text_surface.get_rect(center=self.rect.center)
 
     def draw(self, surface):
+        """
+        Draw the button on the surface
+        :param surface: The surface to draw the button on
+        """
         pygame.draw.rect(surface, self.color, self.rect)
         pygame.draw.rect(surface, BLACK, self.rect, 4)
         surface.blit(self.text_surface, self.text_rect)
 
-    def is_clicked(self, mouse_pos):
+    def is_clicked(self, mouse_pos: tuple[int, int]):
+        """
+        Check if the button is clicked by comparing the mouse position to the button's rectangle
+        :param mouse_pos: The position of the mouse (done automatically by Pygame)
+        :return: True if the button is clicked, False otherwise
+        """
         return self.rect.collidepoint(mouse_pos)

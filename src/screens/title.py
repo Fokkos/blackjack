@@ -1,6 +1,5 @@
 import pygame
-from ..utils.constraints import WINDOW_WIDTH, WHITE, MENU_INPUT_X, MENU_INPUT_X_START, MENU_INPUT_WIDTH, \
-    MENU_INPUT_HEIGHT, MENU_INPUT_X_SPACING
+from ..utils.constraints import *
 from ..components.input_box import InputBox
 from ..components.dropdown import Dropdown
 from ..components.button import Button
@@ -8,6 +7,12 @@ from ..utils.settings import Settings
 
 
 def title_screen(window_surface, settings: Settings) -> str:
+    """
+    Display the title screen and handle user input for the game settings
+    :param window_surface: The surface used to render the title screen
+    :param settings: The game settings object to store the user input
+    :return: The next screen to display
+    """
     global num_players, num_rounds, ace_value
 
     # Load the title image
@@ -18,7 +23,7 @@ def title_screen(window_surface, settings: Settings) -> str:
     players_input = Dropdown(MENU_INPUT_X_START, ["1", "2", "3"], "Players:")
     rounds_input = InputBox(MENU_INPUT_X_START + MENU_INPUT_WIDTH + MENU_INPUT_X_SPACING, "3", "Rounds:")
     stake_input = InputBox(MENU_INPUT_X_START + (2 * (MENU_INPUT_WIDTH + MENU_INPUT_X_SPACING)), "10", "Stake:")
-    start_button = Button(MENU_INPUT_X, 500, MENU_INPUT_WIDTH, MENU_INPUT_HEIGHT, pygame.Color('#008CBA'), "Start")
+    start_button = Button(MENU_INPUT_X, START_BTN_Y, MENU_INPUT_WIDTH, MENU_INPUT_HEIGHT, BLUE, "Start")
 
     is_running = True
     while is_running:

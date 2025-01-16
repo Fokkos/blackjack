@@ -9,20 +9,34 @@ class Deck:
         # Create a deck of 52 cards
         self.cards = [Card(rank, suit) for suit in self.suits for rank in self.ranks]
 
-    # Shuffle the deck to ensure randomness on each session
     def shuffle(self):
+        """
+        Shuffle the deck
+        """
         random.shuffle(self.cards)
 
-    # Deal the top card from the deck and remove it from the deck
-    # TODO deal with empty deck
     def deal_card(self) -> Card:
+        """
+        Deal a card from the deck
+        :return:
+        """
+        # If deck is empty, reset the deck (reshuffle)
+        if len(self.cards) == 0:
+            self.reset()
         return self.cards.pop()
 
     def reset(self):
+        """
+        Reset the deck to a new deck of 52 shuffled cards
+        """
         self.cards = [Card(rank, suit) for suit in self.suits for rank in self.ranks]
         self.shuffle()
 
-    def custom_deck(self, cards):
+    def custom_deck(self, cards: [Card]):
+        """
+        Custom deck for testing purposes
+        :param cards: List of cards to be used in the deck
+        """
         self.cards = cards
 
     # Debug string to print out all the cards in the deck
