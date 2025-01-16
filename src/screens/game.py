@@ -24,6 +24,7 @@ def game_screen(window_surface, settings):
     hit_button = Button(MENU_INPUT_X, 10, 200, MENU_INPUT_HEIGHT, pygame.Color('#008CBA'), "Hit")
     stand_button = Button(MENU_INPUT_X + 220, 10, 200, MENU_INPUT_HEIGHT, pygame.Color('#AA0033'), "Stand")
     next_round_button = Button(MENU_INPUT_X, NEXT_ROUND_BTN_Y, MENU_INPUT_WIDTH, MENU_INPUT_HEIGHT, pygame.Color('#00FF33'), "Next Round")
+    end_game_button = Button(MENU_INPUT_X, NEXT_ROUND_BTN_Y, MENU_INPUT_WIDTH, MENU_INPUT_HEIGHT, pygame.Color('#FF0000'), "End Game")
 
     game_round = 1
     turn = 0
@@ -41,15 +42,16 @@ def game_screen(window_surface, settings):
                         players[turn].add_card(deck)
                         if players[turn].is_bust or players[turn].total == 21:
                             turn += 1
-                    else:
+                    elif turn == settings.num_players:
                         # Draw for dealer
                         dealer.add_card(deck)
                         if dealer.is_bust or dealer.total >= 17:
                             turn += 1
                 if stand_button.is_clicked(event.pos) and turn < settings.num_players:
                     turn += 1
-                # if end of round, enable next round
-                if next_round_button.is_clicked(event.pos) and turn > settings.num_players + 1:
+                # if end of current round but not final overall round, enable next round
+                if next_round_button.is_clicked(event.pos) and turn > settings.num_players + 1 and game_round < settings.num_rounds:
+                    # End game if all rounds are played
                     # Clear all player and dealer cards
                     for player in players:
                         player.clear()
@@ -60,6 +62,8 @@ def game_screen(window_surface, settings):
                         player.add_first_cards(deck)
                     game_round += 1
                     turn = 0
+                elif end_game_button.is_clicked(event.pos) and turn > settings.num_players + 1 and game_round == settings.num_rounds:
+                    return "title_screen"
 
         # Draw the game screen
         window_surface.fill((32, 128, 32))  # Green background
@@ -130,7 +134,10 @@ def game_screen(window_surface, settings):
 
             # Draw the end screen
             draw_end_screen(window_surface, winners)
-            next_round_button.draw(window_surface)
+            if game_round == settings.num_rounds:
+                end_game_button.draw(window_surface)
+            else:
+                next_round_button.draw(window_surface)
 
         pygame.display.update()
 
@@ -173,12 +180,16 @@ def draw_end_screen(surface, winners: [PlayerDeck]):
     pygame.draw.rect(surface, LIGHT_GRAY, (END_SCREEN_X, END_SCREEN_Y, END_SCREEN_WIDTH, END_SCREEN_HEIGHT))
     pygame.draw.rect(surface, BLACK, (END_SCREEN_X, END_SCREEN_Y, END_SCREEN_WIDTH, END_SCREEN_HEIGHT), 6)
     font = pygame.font.SysFont(None, 36)
-    text_surface = font.render("Winners:", True, BLACK)
-    surface.blit(text_surface, (END_SCREEN_X + 5, END_SCREEN_Y + 5))
+    # text surface should be winners if len(winners) > 1
+    if len(winners) == 1:
+        text_surface = font.render("Winner:", True, BLACK)
+    else:
+        text_surface = font.render("Winners:", True, BLACK)
+    surface.blit(text_surface, (END_SCREEN_X + 10, END_SCREEN_Y + 10))
     for i, winner in enumerate(winners):
         if winner.id == -1:
             # Dealer's id is -1
             text_surface = font.render("Dealer", True, BLACK)
         else:
             text_surface = font.render(f"Player {winner.id + 1}", True, BLACK)
-        surface.blit(text_surface, (END_SCREEN_X + 5, END_SCREEN_Y + 25 + i * 20))
+        surface.blit(text_surface, (END_SCREEN_X + 10, END_SCREEN_Y + 30 + i * 20))

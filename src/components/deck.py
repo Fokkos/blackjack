@@ -8,7 +8,6 @@ class Deck:
         self.ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
         # Create a deck of 52 cards
         self.cards = [Card(rank, suit) for suit in self.suits for rank in self.ranks]
-        self.shuffle()
 
     # Shuffle the deck to ensure randomness on each session
     def shuffle(self):
