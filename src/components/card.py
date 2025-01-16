@@ -25,11 +25,14 @@ class Card:
         pygame.draw.rect(surface, (255, 255, 255), (x, y, 100, 150))
         # Draw black border
         pygame.draw.rect(surface, (0, 0, 0), (x, y, 100, 150), 2)
-        # Draw text
+        # Draw text in top left and bottom right
         font = pygame.font.SysFont(None, 24)
         text = font.render(self.rank, True, (0, 0, 0))
         surface.blit(text, (x + 10, y + 10))
         # Draw suit
-        font = pygame.font.SysFont(None, 24)
-        text = font.render(self.suit, True, (0, 0, 0))
-        surface.blit(text, (x + 10, y + 40))
+        suit_image = pygame.image.load(f"img/{self.suit.lower()}.jpg")
+        suit_image = pygame.transform.scale(suit_image, (30, 30))
+        # Draw image in top right and bottom left corner
+        surface.blit(suit_image, (x + 65, y + 5))
+        surface.blit(suit_image, (x + 5, y + 115))
+

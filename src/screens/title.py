@@ -11,13 +11,13 @@ def title_screen(window_surface, settings: Settings) -> str:
     global num_players, num_rounds, ace_value
 
     # Load the title image
-    title_image = pygame.image.load('image.jpg')
+    title_image = pygame.image.load('img/logo.jpg')
     title_image = pygame.transform.scale(title_image, (WINDOW_WIDTH, 150))
 
     # Create UI components
-    players_input = Dropdown(MENU_INPUT_X_START, ["1", "2", "3", "4"], "Players:")
-    rounds_input = InputBox(MENU_INPUT_X_START + MENU_INPUT_WIDTH + MENU_INPUT_X_SPACING, "Rounds:")
-    ace_dropdown = Dropdown(MENU_INPUT_X_START + (2 * (MENU_INPUT_WIDTH + MENU_INPUT_X_SPACING)), ["1", "11"], "Ace Value:")
+    players_input = Dropdown(MENU_INPUT_X_START, ["1", "2", "3"], "Players:")
+    rounds_input = InputBox(MENU_INPUT_X_START + MENU_INPUT_WIDTH + MENU_INPUT_X_SPACING, "3", "Rounds:")
+    stake_input = InputBox(MENU_INPUT_X_START + (2 * (MENU_INPUT_WIDTH + MENU_INPUT_X_SPACING)), "10", "Stake:")
     start_button = Button(MENU_INPUT_X, 500, MENU_INPUT_WIDTH, MENU_INPUT_HEIGHT, pygame.Color('#008CBA'), "Start")
 
     is_running = True
@@ -29,16 +29,14 @@ def title_screen(window_surface, settings: Settings) -> str:
 
             # Handle input box events
             rounds_input.handle_event(event)
+            stake_input.handle_event(event)
 
             # Handle dropdown events
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if players_input.rect.collidepoint(event.pos):
                     players_input.toggle()
-                elif ace_dropdown.rect.collidepoint(event.pos):
-                    ace_dropdown.toggle()
                 else:
                     players_input.select_option(event.pos)
-                    ace_dropdown.select_option(event.pos)
 
             # Check if start button is clicked
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -46,7 +44,7 @@ def title_screen(window_surface, settings: Settings) -> str:
                     # Assign the selected values to variables
                     settings.num_players = int(players_input.selected_option) if players_input.selected_option else 2
                     settings.num_rounds = int(rounds_input.text) if rounds_input.text.isdigit() else 0
-                    settings.ace_value = int(ace_dropdown.selected_option) if ace_dropdown.selected_option else 1
+                    settings.stake = int(stake_input.text) if stake_input.text.isdigit() else 0
 
                     # Proceed to the game screen
                     return "game_screen"
@@ -57,7 +55,7 @@ def title_screen(window_surface, settings: Settings) -> str:
 
         players_input.draw(window_surface)
         rounds_input.draw(window_surface)
-        ace_dropdown.draw(window_surface)
+        stake_input.draw(window_surface)
         start_button.draw(window_surface)
 
         pygame.display.update()

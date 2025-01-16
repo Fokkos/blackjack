@@ -3,11 +3,11 @@ from ..utils.constraints import GRAY, BLACK, BLUE, MENU_INPUT_WIDTH, MENU_INPUT_
 
 
 class InputBox:
-    def __init__(self, x, placeholder=""):
+    def __init__(self, x, default_value, placeholder=""):
         self.rect = pygame.Rect(x, MENU_INPUT_Y, MENU_INPUT_WIDTH, MENU_INPUT_HEIGHT)
         self.font = pygame.font.SysFont(None, 36)
         self.color = GRAY
-        self.text = '1'
+        self.text = default_value
         self.placeholder = placeholder
         self.active = False
 

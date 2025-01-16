@@ -7,6 +7,7 @@ class PlayerDeck:
         self.cards = []
         self.total = 0
         self.is_bust = False
+        self.money = 0
 
     def add_card(self, deck: Deck):
         dealt_card = deck.deal_card()

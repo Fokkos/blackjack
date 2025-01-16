@@ -5,6 +5,8 @@ GRAY = (200, 200, 200)
 LIGHT_GRAY = (220, 220, 220)
 DROPDOWN_COLOUR = (180, 180, 255)
 BLUE = (37, 122, 253)
+GOLD = (255, 215, 0)
+RED = (255, 0, 0)
 
 # Other constants (e.g., window dimensions, font sizes)
 WINDOW_WIDTH = 1280

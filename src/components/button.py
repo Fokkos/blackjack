@@ -1,5 +1,6 @@
 # Reusable button class for creating buttons in Pygame
 import pygame
+from ..utils.constraints import BLACK
 
 
 class Button:
@@ -13,6 +14,7 @@ class Button:
 
     def draw(self, surface):
         pygame.draw.rect(surface, self.color, self.rect)
+        pygame.draw.rect(surface, BLACK, self.rect, 4)
         surface.blit(self.text_surface, self.text_rect)
 
     def is_clicked(self, mouse_pos):
